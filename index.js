@@ -5,9 +5,9 @@ const axios = require('axios');
 const DISCORD_BOT_TOKEN = 'MTMzMDIzNTk3MDEyOTIzNjAyMQ.GUlSBs.Zm4rM243wnUuHRjWU-PNiiq6yBZ1OZ7eisbpA4'; // Replace with your bot token
 
 // API details
-const API_URL = 'http://195.179.229.119/gpt/api.php';
-const API_KEY = 'fa46e0a40af5e2847299d27bef9abfad'; // Replace with your actual API key
-const DEFAULT_MODEL = 'gpt-3.5-turbo';
+const API_URL = 'https://api.ddc.xiolabs.xyz/v1/chat/completions';
+const API_TOKEN = 'Free-For-YT-Subscribers-@DevsDoCode-WatchFullVideo'; // Replace with your actual API token
+const DEFAULT_MODEL = 'provider-3/gpt-4o-mini';
 
 // Create a new Discord client
 const client = new Client({
@@ -35,22 +35,35 @@ client.on('messageCreate', async (message) => {
     if (!userQuestion) {
       return message.reply('Please provide a question after "!ask".');
     }
+    console.log(userQuestion);
 
     try {
       // Make API request
-      const response = await axios.get(API_URL, {
-        params: {
-          prompt: userQuestion,
-          api_key: API_KEY,
+      const response = await axios.post(
+        API_URL,
+        {
           model: DEFAULT_MODEL,
+          messages: [
+            { role: 'system', content: 'You are a helpful assistant.' },
+            { role: 'user', content: userQuestion },
+          ],
+          temperature: 0.7,
+          max_tokens: 1000,
         },
-      });
+        {
+          headers: {
+            Authorization: `Bearer ${API_TOKEN}`,
+          },
+        }
+      );
 
       // Log the entire API response to check its structure
       console.log('API Response:', response.data);
 
       // Extract the response
-      let botResponse = response.data.content || 'I could not find an answer to that question.';
+      const botResponse =
+        response.data.choices[0]?.message?.content ||
+        'I could not find an answer to that question.';
 
       // Split the content into multiple messages if it's too long
       const maxMessageLength = 2000;
@@ -67,7 +80,6 @@ client.on('messageCreate', async (message) => {
       for (const msg of messages) {
         await message.reply(msg);
       }
-
     } catch (error) {
       console.error('Error fetching response:', error.message);
       message.reply('An error occurred while fetching the answer. Please try again later.');
