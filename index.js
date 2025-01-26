@@ -82,7 +82,7 @@ client.on('messageCreate', async (message) => {
       }
     } catch (error) {
       console.error('Error fetching response:', error.message);
-      message.reply('An error occurred while fetching the answer. Please try again later.');
+      message.reply('The server is down. Please try again later.');
     }
   }
 });
