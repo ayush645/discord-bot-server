@@ -1,9 +1,10 @@
 const { Client, GatewayIntentBits } = require('discord.js');
 const axios = require('axios');
 const express = require('express');
+require('dotenv').config();
 
 // Discord bot token (replace with your actual token)
-const DISCORD_BOT_TOKEN = 'MTMzMDIzNTk3MDEyOTIzNjAyMQ.GUlSBs.Zm4rM243wnUuHRjWU-PNiiq6yBZ1OZ7eisbpA4'; // Replace with your bot token
+const DISCORD_BOT_TOKEN = process.env.DISCORD_BOT_TOKEN; // Replace with your bot token
 const API_URL = 'https://api.ddc.xiolabs.xyz/v1/chat/completions';
 const API_TOKEN = 'Free-For-YT-Subscribers-@DevsDoCode-WatchFullVideo'; // Replace with your actual API token
 const DEFAULT_MODEL = 'provider-3/gpt-4o-mini';
@@ -15,7 +16,7 @@ const client = new Client({
 
 // Start Express server to prevent port timeout issues
 const app = express();
-const PORT = process.env.PORT || 3000; // Use platform-provided port or 3000
+const PORT = process.env.PORT || 3100; // Use platform-provided port or 3000
 
 app.get('/', (req, res) => {
   res.send('Discord Bot is running!');
